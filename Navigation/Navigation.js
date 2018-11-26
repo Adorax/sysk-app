@@ -2,22 +2,26 @@
 import React from 'react'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import { StyleSheet, Image } from 'react-native'
-import Search from '../Components/Search'
+import CityList from '../Components/CityList'
+import CategoryList from '../Components/CategoryList'
 import FilmDetail from '../Components/FilmDetail'
 import Favorites from '../Components/Favorites'
 
 const SearchStackNavigator = createStackNavigator({
-  Search: {
-    screen: Search,
+  CityList: {
+    screen: CityList,
     navigationOptions: {
-      title: 'Search'
+      title: 'Cities'
     }
   },
-  FilmDetail: {
-    screen: FilmDetail
+  CategoryList: {
+    screen: CategoryList,
+    navigationOptions: {
+      title: 'Categories'
+    }
   },
 })
-
+/*
 const FavStackNavigator = createStackNavigator({
   Favorites: {
     screen: Favorites,
@@ -37,7 +41,7 @@ const MoviesTabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarIcon: () => { // On définit le rendu de nos icônes par les images récemment ajoutés au projet
         return <Image
-          source={require('../Images/ic_search.png')}
+          source={require('../Img/ic_search.png')}
           style={styles.icon}/> // On applique un style pour les redimensionner comme il faut
       }
     }
@@ -47,7 +51,7 @@ const MoviesTabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarIcon: () => {
         return <Image
-          source={require('../Images/fav_true.png')}
+          source={require('../Img/fav_true.png')}
           style={styles.icon}/>
       }
     }
@@ -69,5 +73,5 @@ const styles = StyleSheet.create({
     height: 30
   }
 })
-
-export default MoviesTabNavigator
+*/
+export default SearchStackNavigator

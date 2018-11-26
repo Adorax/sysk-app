@@ -3,7 +3,7 @@
 import React from 'react'
 import { StyleSheet, View, TextInput, Button, ActivityIndicator, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-import FilmList from './FilmList'
+import FilmList from './CityList'
 
 class Favorites extends React.Component {
 

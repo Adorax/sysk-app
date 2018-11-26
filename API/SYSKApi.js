@@ -26,18 +26,25 @@ export function update (obj, link) {
     body: JSON.stringify(obj)
   })
   .then((response) => response.json())
-  .catch( err => console.error(err))
+  .catch( err => console.error(err));
 }
 
-export function delete (link) {
+export function deleteWithLink (link) {
   return fetch(link, {method: 'DELETE'})
   .then(response => response.json())
-  .catch(error => console.error(error))
+  .catch(error => console.error(error));
 }
 
 // -- CATEGORY -----------------------------------------------------------------
 export function getAllCategories () {
   const url = `${apiRoot}/categories`
+  return fetch(url)
+    .then((response) => response.json())
+    .catch((error) => console.error(error))
+}
+
+export function getCategoriesOfCity (city) {
+  const url = `${apiRoot}/categories/${city}`
   return fetch(url)
     .then((response) => response.json())
     .catch((error) => console.error(error))
@@ -79,6 +86,13 @@ export function deleteCategory (id) {
 // -- PLACE --------------------------------------------------------------------
 export function getAllPlaces() {
   const url = `${apiRoot}/places`
+  return fetch(url)
+    .then((response) => response.json())
+    .catch((error) => console.error(error))
+}
+
+export function getPlacesOfCityAndCat(city, cat) {
+  const url = `${apiRoot}/places/city=${city}&category=${cat}`
   return fetch(url)
     .then((response) => response.json())
     .catch((error) => console.error(error))
@@ -204,7 +218,7 @@ export function deleteCountry (id) {
 export function getAllCities () {
   const url = `${apiRoot}/cities`
   return fetch(url)
-    .then((response) => response.json())
+    .then((response) => response._embedded.cities.json())
     .catch((error) => console.error(error))
 }
 

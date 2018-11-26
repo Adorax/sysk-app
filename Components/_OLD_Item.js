@@ -1,31 +1,16 @@
-// Components/FilmItem.js
+// Components/CityItem.js
 
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 //import { getImageFromApi } from '../API/TMDBApi'
 
-class FilmItem extends React.Component {
-
-
-  _displayFavImg() {
-    if (this.props.isFilmFavorite) {
-      // Si la props isFilmFavorite vaut true, on affiche le 🖤
-      return (
-        <Image
-          style={styles.favorite_image}
-          source={require('../Images/fav_true.png')}
-        />
-      )
-    }
-  }
-
-
+class CityItem extends React.Component {
 
   render() {
-    const { film, displayDetailForFilm } = this.props
+    const { city, displayPlaces } = this.props
     return (
       <TouchableOpacity
-        onPress={() => displayDetailForFilm(film.id)}
+        onPress={() => displayPlaces(city._links.places.href)}
         style={styles.main_container}>
         <Image
           style={styles.image}
@@ -100,4 +85,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default FilmItem
+export default CityItem

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity } from 'react-native'
-import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
+//import { getFilmDetailFromApi, getImageFromApi } from '../API/TMDBApi'
 import numeral from 'numeral'
 import moment from 'moment'
 
@@ -48,10 +48,10 @@ class FilmDetail extends React.Component {
   }
 
   _displayFavoriteImage() {
-      let sourceImage = require('../Images/fav_false.png')
+      let sourceImage = require('../Img/fav_false.png')
       if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
         // Film dans nos favoris
-        sourceImage = require('../Images/fav_true.png')
+        sourceImage = require('../Img/fav_true.png')
       }
       return (
         <Image
