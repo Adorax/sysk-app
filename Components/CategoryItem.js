@@ -3,28 +3,31 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 //import { getImageFromApi } from '../API/TMDBApi'
-
+//linkCity, nameCity, linkCat, categoryName
 class CategoryItem extends React.Component {
 
-  render() {
-    const { category, onClicItem } = this.props
-    return (
-      <TouchableOpacity
-        onPress={() => onClicItem("linkcity", "cityName", "linkCat", category)}
-        style={styles.main_container}>
-        <Image
-          style={styles.image}
-          source={require('../Img/category.jpg')}
-        />
-        <View style={styles.content_container}>
-          <View style={styles.header_container}>
-            <Text style={styles.title_text}>{city.title}</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    )
+    render() {
+      const { category, onClicItem } = this.props
+      return (
+        <TouchableOpacity
+          onPress={() => onClicItem(category)}
+          style={styles.main_container}>
+          <ImageBackground
+            style={styles.image}
+            source={require('../Img/category.jpg')}
+          >
+            <View style={styles.content_container}>
+              <View style={styles.header_container}>
+                <Text style={styles.title_text}>{category}</Text>
+              </View>
+            </View>
+          </ImageBackground>
+
+
+        </TouchableOpacity>
+      )
+    }
   }
-}
 
 const styles = StyleSheet.create({
   main_container: {
@@ -77,4 +80,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default CityItem
+export default CategoryItem

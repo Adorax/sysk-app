@@ -1,7 +1,7 @@
 // Components/CityItem.js
 
 import React from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, ImageBackground, TouchableOpacity } from 'react-native'
 //import { getImageFromApi } from '../API/TMDBApi'
 
 class CityItem extends React.Component {
@@ -12,15 +12,18 @@ class CityItem extends React.Component {
       <TouchableOpacity
         onPress={() => onClicItem(city._links.self.href, city.nameCity)}
         style={styles.main_container}>
-        <Image
+        <ImageBackground
           style={styles.image}
           source={require('../Img/city.jpg')}
-        />
-        <View style={styles.content_container}>
-          <View style={styles.header_container}>
-            <Text style={styles.title_text}>{city.title}</Text>
+        >
+          <View style={styles.content_container}>
+            <View style={styles.header_container}>
+              <Text style={styles.title_text}>{city.nameCity}</Text>
+            </View>
           </View>
-        </View>
+        </ImageBackground>
+
+
       </TouchableOpacity>
     )
   }
@@ -29,27 +32,27 @@ class CityItem extends React.Component {
 const styles = StyleSheet.create({
   main_container: {
     height: 190,
-    flexDirection: 'row'
+    flex: 1,
+    flexDirection: 'row',
   },
   image: {
-    width: 120,
-    height: 180,
-    margin: 5,
+    flex:1,
+    margin:1,
   },
   content_container: {
     flex: 1,
-    margin: 5
+    margin: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header_container: {
-    flex: 3,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   title_text: {
     fontWeight: 'bold',
-    fontSize: 20,
-    flex: 1,
+    fontSize: 32,
     flexWrap: 'wrap',
-    paddingRight: 5
+    backgroundColor: 'white'
   },
   vote_text: {
     fontWeight: 'bold',

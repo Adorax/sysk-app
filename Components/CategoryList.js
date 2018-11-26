@@ -1,7 +1,7 @@
 // Components/FilmList.js
 
 import React from 'react';
-import { StyleSheet, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import { CategoryItem } from './CategoryItem';
 import { connect } from 'react-redux';
 import { getCategoriesOfCity } from '../API/SYSKApi';
@@ -11,14 +11,14 @@ class CategoryList extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { categories: [], isLoading: false, }
+    this.state = { categories: [], isLoading: true, }
+    this._loadCategory();
   }
 
-  _loadCities = () => {
-      this.setState({ isLoading : true });
-      getCategoriesOfCity(this.props.nameCity).then(data => {
+  _loadCategory = () => {
+      getCategoriesOfCity(this.props.navigation.state.params.nameCity).then(data => {
         this.setState({
-          categories: [ ...data.results ],
+          categories: data,
           isLoading : false //Stop loading page
         })
       })
@@ -34,24 +34,27 @@ class CategoryList extends React.Component {
       }
   }
 
-  _displayPlaces = (linkCity, nameCity, linkCat, categoryName) => {
+  _displayPlaces = (/*linkCat, */categoryName) => {
     // On a récupéré les informations de la navigation, on peut afficher le détail du film
-    //this.props.navigation.navigate('PlaceList', {linkCity: linkCity, nameCity: nameCity, linkCat: linkCat, categoryName: categoryName})
+    this.props.navigation.navigate('PlaceList', {linkCity: this.props.linkCity, nameCity: this.props.nameCity, categoryName: categoryName})
   }
 
   render() {
+    console.log(this.state.categories);
+    const { linkCity, nameCity } = this.props
     return (
       <View style={styles.main_container}>
         <FlatList
           style={styles.list}
           data={this.state.categories}
-          keyExtractor={(item) => item.toString()}
+          keyExtractor={(item, index) => item.toString() }
           renderItem={({item}) => (
             <CategoryItem
               category={item}
               onClicItem={this._displayPlaces}
             />
           )}
+          numColumns={2}
         />
         {this._displayLoading()}
       </View>
@@ -62,14 +65,6 @@ class CategoryList extends React.Component {
   const styles = StyleSheet.create({
     main_container: {
       flex: 1
-    },
-    textinput: {
-      marginLeft: 5,
-      marginRight: 5,
-      height: 50,
-      borderColor: '#000000',
-      borderWidth: 1,
-      paddingLeft: 5
     },
     loading_container: {
       position: 'absolute',

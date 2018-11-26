@@ -44,7 +44,8 @@ export function getAllCategories () {
 }
 
 export function getCategoriesOfCity (city) {
-  const url = `${apiRoot}/categories/${city}`
+  const url = `${apiRoot}/categories/${city}`;
+  console.log(url);
   return fetch(url)
     .then((response) => response.json())
     .catch((error) => console.error(error))
@@ -218,7 +219,7 @@ export function deleteCountry (id) {
 export function getAllCities () {
   const url = `${apiRoot}/cities`
   return fetch(url)
-    .then((response) => response._embedded.cities.json())
+    .then((response) => response.json())
     .catch((error) => console.error(error))
 }
 

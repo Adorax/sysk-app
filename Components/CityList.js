@@ -1,26 +1,24 @@
 // Components/FilmList.js
 
 import React from 'react';
-import { StyleSheet, FlatList } from 'react-native';
-import { CityItem } from './CityItem';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import CityItem from './CityItem';
 import { connect } from 'react-redux';
-import { getAllCities } from '../API/TMDBApi';
+import { getAllCities } from '../API/SYSKApi';
 
 
 class CityList extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { cities: [], isLoading: false, }
-    this._loadCities;
+    this.state = { cities: [], isLoading: true, }
+    this._loadCities();
   }
 
   _loadCities = () => {
-      this.setState({ isLoading : true });
       getAllCities().then(data => {
-
         this.setState({
-          cities: [ ...data.results ],
+          cities: data._embedded.cities,
           isLoading : false //Stop loading page
         })
       })
@@ -39,7 +37,7 @@ class CityList extends React.Component {
 
   _displayCategory = (linkCity, nameCity) => {
     // On a récupéré les informations de la navigation, on peut afficher le détail du film
-    this.props.navigation.navigate('CategoryList', {idCity: idCity, nameCity: nameCity})
+    this.props.navigation.navigate('CategoryList', {linkCity: linkCity, nameCity: nameCity});
   }
 
   render() {
@@ -48,13 +46,14 @@ class CityList extends React.Component {
         <FlatList
           style={styles.list}
           data={this.state.cities}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) => item.nameCity }
           renderItem={({item}) => (
             <CityItem
               city={item}
               onClicItem={this._displayCategory}
             />
           )}
+          numColumns={2}
         />
         {this._displayLoading()}
       </View>
@@ -65,14 +64,6 @@ class CityList extends React.Component {
   const styles = StyleSheet.create({
     main_container: {
       flex: 1
-    },
-    textinput: {
-      marginLeft: 5,
-      marginRight: 5,
-      height: 50,
-      borderColor: '#000000',
-      borderWidth: 1,
-      paddingLeft: 5
     },
     loading_container: {
       position: 'absolute',
