@@ -93,7 +93,7 @@ export function getAllPlaces() {
 }
 
 export function getPlacesOfCityAndCat(city, cat) {
-  const url = `${apiRoot}/places/city=${city}&category=${cat}`
+  const url = `${apiRoot}/places?city=${city}&category=${cat}`
   return fetch(url)
     .then((response) => response.json())
     .catch((error) => console.error(error))

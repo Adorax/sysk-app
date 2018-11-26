@@ -4,8 +4,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import { StyleSheet, Image } from 'react-native'
 import CityList from '../Components/CityList'
 import CategoryList from '../Components/CategoryList'
-import FilmDetail from '../Components/FilmDetail'
-import Favorites from '../Components/Favorites'
+import PlaceList from '../Components/PlaceList';
 
 const SearchStackNavigator = createStackNavigator({
   CityList: {
@@ -18,6 +17,12 @@ const SearchStackNavigator = createStackNavigator({
     screen: CategoryList,
     navigationOptions: {
       title: 'Categories'
+    }
+  },
+  PlaceList: {
+    screen: PlaceList,
+    navigationOptions: {
+      title: 'Places'
     }
   },
 })

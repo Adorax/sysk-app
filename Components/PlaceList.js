@@ -2,27 +2,28 @@
 
 import React from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
-import CategoryItem from './CategoryItem';
+import PlaceItem from './PlaceItem';
 import { connect } from 'react-redux';
-import { getCategoriesOfCity } from '../API/SYSKApi';
+import { getPlacesOfCityAndCat } from '../API/SYSKApi';
 
 
-class CategoryList extends React.Component {
+class PlaceList extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { categories: [], isLoading: true, }
-    this._loadCategory();
+    this.state = { places: [], isLoading: true, }
+    this._loadPlaces();
   }
 
-  _loadCategory = () => {
-      getCategoriesOfCity(this.props.navigation.state.params.nameCity).then(data => {
+  _loadPlaces = () => {
+      getPlacesOfCityAndCat(this.props.navigation.state.params.nameCity, this.props.navigation.state.params.categoryName).then(data => {
         this.setState({
-          categories: data,
+          places: data,
           isLoading : false //Stop loading page
         })
       })
   }
+
 
   _displayLoading() {
       if (this.state.isLoading) {
@@ -34,28 +35,24 @@ class CategoryList extends React.Component {
       }
   }
 
-  _displayPlaces = (/*linkCat, */categoryName) => {
+  _displayPlace = (idPlace) => {
     // On a récupéré les informations de la navigation, on peut afficher le détail du film
-    this.props.navigation.navigate('PlaceList', {linkCity: this.props.navigation.state.params.linkCity, nameCity: this.props.navigation.state.params.nameCity, categoryName: categoryName})
+    this.props.navigation.navigate('PlaceInfo', {idPlace: idPlace});
   }
 
   render() {
-    console.log(this.state.categories);
-
-    const { linkCity, nameCity } = this.props
     return (
       <View style={styles.main_container}>
         <FlatList
           style={styles.list}
-          data={this.state.categories}
-          keyExtractor={(item, index) => item.toString() }
+          data={this.state.places}
+          keyExtractor={(item, index) => item.idPlace.toString() }
           renderItem={({item}) => (
-            <CategoryItem
-              category={item}
-              onClicItem={this._displayPlaces}
+            <PlaceItem
+              place={item}
+              onClicItem={this._displayPlace}
             />
           )}
-          numColumns={2}
         />
         {this._displayLoading()}
       </View>
@@ -88,4 +85,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(CategoryList)
+export default connect(mapStateToProps)(PlaceList)
