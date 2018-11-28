@@ -9,7 +9,7 @@ class PlaceItem extends React.Component {
       const { place, onClicItem } = this.props
       return (
         <TouchableOpacity
-          onPress={() => onClicItem(place.idPlace)}
+          onPress={() => onClicItem(place._links.self.href)}
           style={styles.main_container}>
           <Image
             style={styles.image}

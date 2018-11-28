@@ -44,8 +44,14 @@ export function getAllCategories () {
 }
 
 export function getCategoriesOfCity (city) {
-  const url = `${apiRoot}/categories/${city}`;
-  console.log(url);
+  const url = `${apiRoot}/categories/search/findCat?city=${city}`;
+  return fetch(url)
+    .then((response) => response.json())
+    .catch((error) => console.error(error))
+}
+
+export function getCatOfPlace (idPlace) {
+  const url = `${apiRoot}/categories/search/getCatOfPlace?idPlace=${idPlace}`;
   return fetch(url)
     .then((response) => response.json())
     .catch((error) => console.error(error))
@@ -93,7 +99,7 @@ export function getAllPlaces() {
 }
 
 export function getPlacesOfCityAndCat(city, cat) {
-  const url = `${apiRoot}/places?city=${city}&category=${cat}`
+  const url = `${apiRoot}/places/search/findPlaces?city=${city}&category=${cat}`
   return fetch(url)
     .then((response) => response.json())
     .catch((error) => console.error(error))

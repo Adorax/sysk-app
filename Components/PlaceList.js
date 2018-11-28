@@ -18,7 +18,7 @@ class PlaceList extends React.Component {
   _loadPlaces = () => {
       getPlacesOfCityAndCat(this.props.navigation.state.params.nameCity, this.props.navigation.state.params.categoryName).then(data => {
         this.setState({
-          places: data,
+          places: data._embedded.places,
           isLoading : false //Stop loading page
         })
       })
@@ -35,9 +35,9 @@ class PlaceList extends React.Component {
       }
   }
 
-  _displayPlace = (idPlace) => {
+  _displayPlace = (linkPlace) => {
     // On a récupéré les informations de la navigation, on peut afficher le détail du film
-    this.props.navigation.navigate('PlaceInfo', {idPlace: idPlace});
+    this.props.navigation.navigate('PlaceDetail', {linkPlace: linkPlace});
   }
 
   render() {
@@ -46,7 +46,7 @@ class PlaceList extends React.Component {
         <FlatList
           style={styles.list}
           data={this.state.places}
-          keyExtractor={(item, index) => item.idPlace.toString() }
+          keyExtractor={(item, index) => item._links.self.href }
           renderItem={({item}) => (
             <PlaceItem
               place={item}
