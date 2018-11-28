@@ -1,10 +1,12 @@
 // Components/PlaceDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity, Hr } from 'react-native'
 import { getAPlace, get, getCatOfPlace } from '../API/SYSKApi'
 import numeral from 'numeral'
 import moment from 'moment'
+import Tags from "react-native-tags"
+import { Icon } from 'react-native-elements'
 
 import { connect } from 'react-redux'
 
@@ -61,8 +63,7 @@ class PlaceDetail extends React.Component {
 
   _displayFavoriteImage() {
       let sourceImage = require('../Img/fav_false.png')
-      /*if (this.props.favoritesFilm.findIndex(item => item.id === this.state.film.id) !== -1) {
-        // Film dans nos favoris
+      /*if (this.props.favoritesPlace.findIndex(item => item._links.self.href === this.state.place._links.self.href) !== -1) {
         sourceImage = require('../Img/fav_true.png')
       }*/
       return (
@@ -82,28 +83,54 @@ class PlaceDetail extends React.Component {
             style={styles.image}
             source={require('../Img/place.jpg')}
           />
-        <Text style={styles.title_text}>{place.namePlace}</Text>
-          <TouchableOpacity
-            style={styles.favorite_container}
-            onPress={() => this._toggleFavorite()}>
-            {this._displayFavoriteImage()}
-          </TouchableOpacity>
+          <View style={styles.button_container}>
+            <Icon
+              size={38}
+              name='thumb-up'
+              onPress={() => console.log('up')}
+            />
+            <Text style={styles.title_text}>{place.namePlace}</Text>
+              <Icon
+                size={38}
+                name='tag_faces'
+                onPress={() => console.log('up')}
+              />
+          </View>
+          <View style={styles.button_container}>
+            <Icon
+              size={38}
+              name='thumbs-up'
+              type='font-awesome'
+              color='black'
+              onPress={() => console.log('up')}
+            />
+            <TouchableOpacity
+              style={styles.favorite_container}
+              onPress={() => this._toggleFavorite()}>
+              {this._displayFavoriteImage()}
+            </TouchableOpacity>
+            <Icon
+              size={38}
+              name='thumbs-down'
+              type='font-awesome'
+              onPress={() => console.log('down')}
+            />
+          </View>
           <Text style={styles.description_text}>{place.description}</Text>
           <Text style={styles.default_text}>Address : {place.address} {moment(new Date()).format('DD/MM/YYYY')}</Text>
           <Text style={styles.default_text}>City : {this.state.city} </Text>
           <Text style={styles.default_text}>Note :  / 10</Text>
           <Text style={styles.default_text}>Nombre de votes : </Text>
           <Text style={styles.default_text}>Budget : {numeral().format('0,0[.]00 $')}</Text>
-          <Text style={styles.default_text}>Category : {this.state.category.map(function(category){
-              return category.categoryName;
-            }).join(" / ")}
-          </Text>
-          <Text style={styles.default_text}>Companie(s) : {/*film.production_companies.map(function(company){
-              return company.name;
-            }).join(" / ")*/}
-          </Text>
-
-          {/* Pour l'instant je n'affiche que le titre, je vous laisserais le soin de créer la vue. Après tout vous êtes aussi là pour ça non ? :)*/}
+          <Text style={styles.default_text}>Category :</Text>
+          <Tags
+            initialTags={this.state.category.map(function(category){
+                          return category.categoryName;
+                        })}
+            containerStyle={{ justifyContent: "center" }}
+            deleteTagOnPress={false}
+            readonly={true}
+          />
         </ScrollView>
       )
     }
@@ -164,6 +191,11 @@ const styles = StyleSheet.create({
   },
   favorite_container: {
     alignItems: 'center',
+  },
+  button_container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   favorite_image: {
     width: 40,
