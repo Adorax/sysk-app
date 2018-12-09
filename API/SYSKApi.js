@@ -35,6 +35,19 @@ export function deleteWithLink (link) {
   .catch(error => console.error(error));
 }
 
+// -- LOGIN --------------------------------------------------------------------
+export function checkLogin (credential) {
+  return fetch(`${apiRoot}/login`,
+    {   method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(credential)
+    })
+    .then(response => response.json())
+    .catch(err => console.error(err))
+}
+
+
+
 // -- CATEGORY -----------------------------------------------------------------
 export function getAllCategories () {
   const url = `${apiRoot}/categories`

@@ -2,12 +2,55 @@
 import React from 'react'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import { StyleSheet, Image } from 'react-native'
+import { Icon } from 'react-native-elements'
 import CityList from '../Components/CityList'
 import CategoryList from '../Components/CategoryList'
 import PlaceList from '../Components/PlaceList'
 import PlaceDetail from '../Components/PlaceDetail'
+import LoginView from '../Views/Login/LoginView'
+import RegisterView from '../Views/Login/RegisterView'
+
+const LoginTabNavigator = createBottomTabNavigator({
+   Login: {
+    screen: LoginView,
+    navigationOptions: {
+      tabBarIcon: () => {
+        return <Image
+          source={require('../Img/login.png')}
+          style={styles.icon}/>
+      }
+    }
+  },
+  Register: {
+    screen: RegisterView,
+    navigationOptions: {
+      title: 'Register',
+      tabBarIcon: () => {
+        return <Image
+          source={require('../Img/register.png')}
+          style={styles.icon}/>
+      }
+    }
+  }
+},
+{
+  tabBarOptions: {
+    activeBackgroundColor: '#DDDDDD', // Couleur d'arrière-plan de l'onglet sélectionné
+    inactiveBackgroundColor: '#FFFFFF', // Couleur d'arrière-plan des onglets non sélectionnés
+    showLabel: true, // On masque les titres
+    showIcon: true // On informe le TabNavigator qu'on souhaite afficher les icônes définis
+  }
+}
+)
 
 const SearchStackNavigator = createStackNavigator({
+  Login: {
+    screen: LoginTabNavigator,
+    navigationOptions: {
+      header: null
+
+    }
+  },
   CityList: {
     screen: CityList,
     navigationOptions: {
@@ -33,51 +76,7 @@ const SearchStackNavigator = createStackNavigator({
     }
   },
 })
-/*
-const FavStackNavigator = createStackNavigator({
-  Favorites: {
-    screen: Favorites,
-    navigationOptions: {
-      title: 'Favorites'
-    }
-  },
-  FilmDetail: {
-    screen: FilmDetail
-  },
-})
 
-const MoviesTabNavigator = createBottomTabNavigator({
-  Search: {
-    //We integrate the stack navigation in our tab navigation
-    screen: SearchStackNavigator,
-    navigationOptions: {
-      tabBarIcon: () => { // On définit le rendu de nos icônes par les images récemment ajoutés au projet
-        return <Image
-          source={require('../Img/ic_search.png')}
-          style={styles.icon}/> // On applique un style pour les redimensionner comme il faut
-      }
-    }
-  },
-  Favorites: {
-    screen: FavStackNavigator,
-    navigationOptions: {
-      tabBarIcon: () => {
-        return <Image
-          source={require('../Img/fav_true.png')}
-          style={styles.icon}/>
-      }
-    }
-  }
-},
-{
-  tabBarOptions: {
-    activeBackgroundColor: '#DDDDDD', // Couleur d'arrière-plan de l'onglet sélectionné
-    inactiveBackgroundColor: '#FFFFFF', // Couleur d'arrière-plan des onglets non sélectionnés
-    showLabel: false, // On masque les titres
-    showIcon: true // On informe le TabNavigator qu'on souhaite afficher les icônes définis
-  }
-}
-)
 
 const styles = StyleSheet.create({
   icon: {
@@ -85,5 +84,5 @@ const styles = StyleSheet.create({
     height: 30
   }
 })
-*/
+
 export default SearchStackNavigator

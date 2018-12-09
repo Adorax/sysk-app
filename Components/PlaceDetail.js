@@ -117,7 +117,7 @@ class PlaceDetail extends React.Component {
             />
           </View>
           <Text style={styles.description_text}>{place.description}</Text>
-          <Text style={styles.default_text}>Address : {place.address} {moment(new Date()).format('DD/MM/YYYY')}</Text>
+          <Text style={styles.default_text}>Address : {place.address}</Text>
           <Text style={styles.default_text}>City : {this.state.city} </Text>
           <Text style={styles.default_text}>Note :  / 10</Text>
           <Text style={styles.default_text}>Nombre de votes : </Text>
