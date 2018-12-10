@@ -1,7 +1,7 @@
 // Components/PlaceDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity, Hr } from 'react-native'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity, Linking } from 'react-native'
 import { getAPlace, get, getCatOfPlace } from '../API/SYSKApi'
 import numeral from 'numeral'
 import moment from 'moment'
@@ -11,6 +11,10 @@ import { Icon } from 'react-native-elements'
 import { connect } from 'react-redux'
 
 class PlaceDetail extends React.Component {
+
+  navigationOptions: {
+    title: 'Details'
+  }
   constructor(props) {
     super(props)
     this.state = {
@@ -61,6 +65,11 @@ class PlaceDetail extends React.Component {
         this.props.dispatch(action)
   }
 
+  _linkAddress() {
+    const address = this.state.place.address + ", " + this.state.city;
+    Linking.openURL('https://www.google.com/maps/search/?api=1&query=' + address);
+  }
+
   _displayFavoriteImage() {
       let sourceImage = require('../Img/fav_false.png')
       /*if (this.props.favoritesPlace.findIndex(item => item._links.self.href === this.state.place._links.self.href) !== -1) {
@@ -84,17 +93,18 @@ class PlaceDetail extends React.Component {
             source={require('../Img/place.jpg')}
           />
           <View style={styles.button_container}>
+            {/* 95% of 105 rates like this spot */}
             <Icon
               size={38}
               name='thumb-up'
               onPress={() => console.log('up')}
             />
             <Text style={styles.title_text}>{place.namePlace}</Text>
-              <Icon
+              {/* distance from you ...     <Icon
                 size={38}
                 name='tag_faces'
                 onPress={() => console.log('up')}
-              />
+              />*/}
           </View>
           <View style={styles.button_container}>
             <Icon
@@ -116,8 +126,12 @@ class PlaceDetail extends React.Component {
               onPress={() => console.log('down')}
             />
           </View>
-          <Text style={styles.description_text}>{place.description}</Text>
-          <Text style={styles.default_text}>Address : {place.address}</Text>
+          <Text style={styles.description_text}> {place.description} </Text>
+          <View>
+          <TouchableOpacity
+              onPress={() => this._linkAddress()}>
+              <Text style={styles.default_text}>Address : {place.address}</Text>
+          </TouchableOpacity></View>
           <Text style={styles.default_text}>City : {this.state.city} </Text>
           <Text style={styles.default_text}>Note :  / 10</Text>
           <Text style={styles.default_text}>Nombre de votes : </Text>
@@ -181,6 +195,7 @@ const styles = StyleSheet.create({
   description_text: {
     fontStyle: 'italic',
     color: '#666666',
+    textAlign: 'justify',
     margin: 5,
     marginBottom: 15
   },

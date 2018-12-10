@@ -54,6 +54,7 @@ const SearchStackNavigator = createStackNavigator({
   CityList: {
     screen: CityList,
     navigationOptions: {
+      header: null,
       title: 'Cities'
     }
   },
@@ -71,9 +72,6 @@ const SearchStackNavigator = createStackNavigator({
   },
   PlaceDetail: {
     screen: PlaceDetail,
-    navigationOptions: {
-      title: 'Detail'
-    }
   },
 })
 

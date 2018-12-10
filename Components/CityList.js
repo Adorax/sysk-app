@@ -2,9 +2,11 @@
 
 import React from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { Header, Icon } from 'react-native-elements'
 import CityItem from './CityItem';
 import { connect } from 'react-redux';
 import { getAllCities } from '../API/SYSKApi';
+import { signOut } from '../Views/Login/LoginView';
 
 
 class CityList extends React.Component {
@@ -40,9 +42,18 @@ class CityList extends React.Component {
     this.props.navigation.navigate('CategoryList', {linkCity: linkCity, nameCity: nameCity});
   }
 
+  logOut = () => {
+    signOut();
+    this.props.navigation.goBack();
+  }
+
   render() {
     return (
       <View style={styles.main_container}>
+        <Header
+          centerComponent={{ text: 'Cities', style: { color: '#fff' } }}
+          rightComponent={ <Icon name='sign-out' type='font-awesome' color='#fff' onPress={() => this.logOut()} /> }
+        />
         <FlatList
           style={styles.list}
           data={this.state.cities}

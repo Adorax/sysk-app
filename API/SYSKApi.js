@@ -1,6 +1,14 @@
 // API/TMDBApi.js
 import { apiRoot } from '../Constants'
 
+
+
+/*ADD RATE :
+    Create a rate with only the like
+    Make 2 PUT like that :
+    url -i -X PUT -H "Content-Type:text/uri-list" -d "https://sysk-api.herokuapp.com/api/places/1" https://sysk-api.herokuapp.com/api/rates/11/place
+    curl -i -X PUT -H "Content-Type:text/uri-list" -d "https://sysk-api.herokuapp.com/api/users/1" https://sysk-api.herokuapp.com/api/rates/11/user
+*/
 // -- CRUD FROM A LINK ----------------------------------------------------------
 export function get (link) {
   return fetch(link)
@@ -331,7 +339,7 @@ export function getARate (id) {
     .catch((error) => console.error(error));
 }
 
-export function addRate (rate) {
+/*export function addRate (rate) {
   return fetch(`${apiRoot}/rates`,
     {   method: 'POST',
         headers: { 'Content-Type': 'application/json', },
@@ -339,7 +347,48 @@ export function addRate (rate) {
     })
     .then(response => response.json())
     .catch(err => console.error(err))
+}*/
+
+/*
+  Need a Json like that :
+    {
+      "rate" : boolean,
+    	"idUser" : long,
+    	"idPlace" : long
+    }
+*/
+export function addRate (rate) {
+  return fetch(`${apiRoot}/addRate`,
+    {   method: 'POST',
+        headers: { 'Content-Type': 'application/json', },
+        body: JSON.stringify(rate)
+    })
+    .then(response => response.json())
+    .catch(err => console.error(err))
 }
+
+//The two next function are not used anymore
+export function putPlaceRate (place, link) {
+  return fetch(link,
+  {
+    method: 'PUT',
+    headers: { 'Content-Type': 'text/uri-list', },
+    body: place
+  })
+  .then((response) => response.json())
+  .catch( err => console.error(err))
+}
+export function putUserRate (user, link) {
+  return fetch(link,
+  {
+    method: 'PUT',
+    headers: { 'Content-Type': 'text/uri-list', },
+    body: user
+  })
+  .then((response) => response.json())
+  .catch( err => console.error(err))
+}
+
 
 export function updateRate (rate, id) {
   return fetch(`${apiRoot}/rates/${id}`,

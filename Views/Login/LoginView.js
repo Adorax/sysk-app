@@ -3,21 +3,21 @@ import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, Alert, Async
 import { checkLogin } from '../../API/SYSKApi'
 import { Header, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
 
-
 export default class LoginView extends React.Component {
   //static navigationOptions= { title: 'Login',};
 
   constructor(props) {
     super(props);
-    this.state = {
-        credential: {username: '', password: ''}, login: '', isLoading: false
-    };
+    this.username = "";
+    this.password = "";
+    this.state = { login: '', isLoading: false };
   }
 
   _storeLogin = async (login) => {
+      //Store all rate of this user on redux
       try {
-          console.log(login.username);
-          await AsyncStorage.setItem("login", login.Username);
+          console.log(login);
+          await AsyncStorage.setItem("idUser", login.username);
           this.setState({isLoading: false})
       } catch (error) {
           console.log(error);
@@ -26,8 +26,8 @@ export default class LoginView extends React.Component {
 
   _login = () => {
       this.setState({isLoading: true})
-      const credential = { username: this.state.credential.username, password: this.state.credential.password };
-      checkLogin(this.state.credential).then(user => {
+      const credential = { username: this.username, password: this.password };
+      checkLogin(credential).then(user => {
         if (user.username) {
           this._storeLogin(user);
         } else {
@@ -38,18 +38,16 @@ export default class LoginView extends React.Component {
   }
 
 //make this funciton exportable
-  logout = () => {
-      AsyncStorage.removeItem("login");
-      this.render();
-  }
+
 
   _isUserConnected = async () => {
       try {
-          const value = await AsyncStorage.getItem("login");
-              this.setState({ login: value });
-              if (value) {
-                this.props.navigation.navigate('Cities');
-              }
+          const value = await AsyncStorage.getItem("idUser");
+          console.log(value+ " dd");
+          if (value) {
+            console.log("YOU");
+            this.props.navigation.navigate('CityList');
+          }
       } catch (error) {
            console.log(error);
       }
@@ -62,16 +60,15 @@ export default class LoginView extends React.Component {
 
   render() {
     this._isUserConnected()
-    console.log(this.state.credential);
       return (
         <View style={{flex: 1}}>
           <ImageBackground source={require('../../Img/SYSK-Logo.png')} style={{flex: 11}}>
           </ImageBackground>
           <View style={{flex:9, justifyContent: 'space-around'}}>
             <FormLabel>Username</FormLabel>
-            <FormInput onChangeText={(text) => this.setState({ credential :{ username: text, password: this.state.credential.password} })} value={this.state.credential.username} />
+            <FormInput onChangeText={(text) =>  {this.username = text} } />
             <FormLabel>Password</FormLabel>
-            <FormInput onChangeText={(text) => this.setState({ credential :{ username: this.state.credential.username, password: text} })} value={this.state.credential.password} />
+            <FormInput onChangeText={(text) => this.password = text } />
             <Button
               title="LOADING BUTTON"
               loading={this.state.isLoading}
@@ -98,4 +95,6 @@ export default class LoginView extends React.Component {
 
 }
 
-//  <Button rounded icon={{ name: 'send' }}  title="Login" />
+export const signOut = () => {
+    AsyncStorage.removeItem("login");
+}
