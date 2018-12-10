@@ -1,8 +1,8 @@
 // Components/PlaceDetail.js
 
 import React from 'react'
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity, Linking } from 'react-native'
-import { getAPlace, get, getCatOfPlace } from '../API/SYSKApi'
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, Button, TouchableOpacity, Linking, AsyncStorage } from 'react-native';
+import { getAPlace, get, getCatOfPlace, getAUserbyUsername, addRate} from '../API/SYSKApi'
 import numeral from 'numeral'
 import moment from 'moment'
 import Tags from "react-native-tags"
@@ -46,10 +46,6 @@ class PlaceDetail extends React.Component {
     });
   }
 
-  componentDidUpdate() {
-    //console.log(this.props.favoritesFilm)
-  }
-
   _displayLoading() {
     if (this.state.isLoading) {
       return (
@@ -58,6 +54,23 @@ class PlaceDetail extends React.Component {
         </View>
       )
     }
+  }
+
+  addRate = async (isUp) => {
+    let idPlace = this.state.place._links.self.href.split("/")
+    idPlace = idPlace[idPlace.length-1];
+    console.log(idPlace + " ========================================================");
+    const username = await AsyncStorage.getItem("login");
+    getAUserbyUsername(username).then(user => {
+        console.log(user._links.self.href);
+        let idUser = user._links.self.href.split("/")
+        idUser = idUser[idUser.length-1];
+        console.log(idUser + " ========================================================");
+        addRate({"rate" : isUp, "idUser" : idUser, "idPlace" : idPlace}).then(rate => {
+          console.log(rate);
+        });
+    });
+
   }
 
   _toggleFavorite() {
@@ -94,11 +107,11 @@ class PlaceDetail extends React.Component {
           />
           <View style={styles.button_container}>
             {/* 95% of 105 rates like this spot */}
-            <Icon
+            {/*<Icon
               size={38}
               name='thumb-up'
               onPress={() => console.log('up')}
-            />
+            />*/}
             <Text style={styles.title_text}>{place.namePlace}</Text>
               {/* distance from you ...     <Icon
                 size={38}
@@ -112,7 +125,7 @@ class PlaceDetail extends React.Component {
               name='thumbs-up'
               type='font-awesome'
               color='black'
-              onPress={() => console.log('up')}
+              onPress={() => this.addRate(true)}
             />
             <TouchableOpacity
               style={styles.favorite_container}
@@ -123,7 +136,7 @@ class PlaceDetail extends React.Component {
               size={38}
               name='thumbs-down'
               type='font-awesome'
-              onPress={() => console.log('down')}
+              onPress={() => this.addRate(false)}
             />
           </View>
           <Text style={styles.description_text}> {place.description} </Text>

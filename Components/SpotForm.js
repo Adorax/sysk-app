@@ -1,9 +1,10 @@
 import React from 'react'
 import { StyleSheet, View, Text, ImageBackground, TouchableOpacity, Alert, AsyncStorage } from 'react-native'
-import { addUser } from '../../API/SYSKApi'
+import { addUser } from '../API/SYSKApi'
 import { Header, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
+import Tags from "react-native-tags"
 
 export default class LoginView extends React.Component {
 
@@ -44,17 +45,6 @@ export default class LoginView extends React.Component {
     }
   }
 
-  _isUserConnected = async () => {
-      try {
-          const value = await AsyncStorage.getItem("login");
-          if (value) {
-            this.props.navigation.navigate('CityList');
-          }
-      } catch (error) {
-           console.log(error);
-      }
-  }
-
   _displayErrorPwd() {
     if (!this.state.ckPwd) {
       return (<FormValidationMessage>Passwords are not the same</FormValidationMessage>)
@@ -74,22 +64,29 @@ export default class LoginView extends React.Component {
   }
 
   render() {
-      this._isUserConnected()
       return (
         <View style={{flex: 1}}>
           <Header
-            centerComponent={{ text: 'Fill your informations', style: { color: '#fff' } }}
+            centerComponent={{ text: 'Add a new spot', style: { color: '#fff' } }}
           />
           <View style={{flex: 1, justifyContent: 'space-around'}}>
-            <FormLabel>Email</FormLabel>
-            <FormInput onChangeText={(text) =>  {this.email = text} } />
-            <FormLabel>Username</FormLabel>
-            <FormInput onChangeText={(text) =>  {this.username = text} } />
-            <FormLabel>Password</FormLabel>
-            <FormInput secureTextEntry onChangeText={(text) => {this.password = text; this._checkPwd()} } />
-            <FormLabel>Repeat password</FormLabel>
-            <FormInput secureTextEntry onChangeText={(text) => {this.rptPwd = text; this._checkPwd()} } />
-            {this._displayErrorPwd()}
+            <FormLabel>Name of the spot</FormLabel>
+            <FormInput onChangeText={(text) =>  {this.namePlace = text} } />
+            <FormLabel>Address</FormLabel>
+            <FormInput onChangeText={(text) =>  {this.address = text} } />
+            <FormLabel>City</FormLabel>
+            <FormInput value={this.props.navigation.state.params.nameCity} disabled />
+            <FormLabel>Description</FormLabel>
+            <FormInput onChangeText={(text) =>  {this.description = text} } />
+            <FormLabel>Category</FormLabel>
+            <Tags
+              textInputProps={{
+                placeholder: "Category"
+              }}
+              containerStyle={{ justifyContent: "center" }}
+              deleteTagOnPress={true}
+              readonly={false}
+            />
             <Button
               title="Save"
               loading={this.state.isLoading}

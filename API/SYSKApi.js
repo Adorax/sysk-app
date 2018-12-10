@@ -421,6 +421,13 @@ export function getAUser (id) {
     .catch((error) => console.error(error));
 }
 
+export function getAUserbyUsername (username) {
+  console.log("======================================================================");
+  return fetch(`${apiRoot}/users/search/findByUsername?username=${username}`)
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
+}
+
 export function addUser (user) {
   return fetch(`${apiRoot}/users`,
     {   method: 'POST',

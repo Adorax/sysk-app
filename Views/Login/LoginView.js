@@ -4,7 +4,6 @@ import { checkLogin } from '../../API/SYSKApi'
 import { Header, FormLabel, FormInput, FormValidationMessage, Button } from 'react-native-elements'
 
 export default class LoginView extends React.Component {
-  //static navigationOptions= { title: 'Login',};
 
   constructor(props) {
     super(props);
@@ -17,7 +16,7 @@ export default class LoginView extends React.Component {
       //Store all rate of this user on redux
       try {
           console.log(login);
-          await AsyncStorage.setItem("idUser", login.username);
+          await AsyncStorage.setItem("login", login.username);
           this.setState({isLoading: false})
       } catch (error) {
           console.log(error);
@@ -42,21 +41,14 @@ export default class LoginView extends React.Component {
 
   _isUserConnected = async () => {
       try {
-          const value = await AsyncStorage.getItem("idUser");
-          console.log(value+ " dd");
+          const value = await AsyncStorage.getItem("login");
           if (value) {
-            console.log("YOU");
             this.props.navigation.navigate('CityList');
           }
       } catch (error) {
            console.log(error);
       }
   }
-
-  navigateHome = () => {
-      this.props.navigation.navigate('Cities')
-  }
-
 
   render() {
     this._isUserConnected()
@@ -68,9 +60,9 @@ export default class LoginView extends React.Component {
             <FormLabel>Username</FormLabel>
             <FormInput onChangeText={(text) =>  {this.username = text} } />
             <FormLabel>Password</FormLabel>
-            <FormInput onChangeText={(text) => this.password = text } />
+            <FormInput secureTextEntry onChangeText={(text) => this.password = text } />
             <Button
-              title="LOADING BUTTON"
+              title="Login"
               loading={this.state.isLoading}
               loadingProps={{ size: "large", color: "rgba(111, 202, 186, 1)" }}
               titleStyle={{ fontWeight: "700" }}
@@ -84,15 +76,10 @@ export default class LoginView extends React.Component {
               onPress={this._login}
               icon={{ name: 'send' }}
             />
-
           </View>
-
-
-
         </View>
       );
   }
-
 }
 
 export const signOut = () => {

@@ -18,6 +18,7 @@
     "react-native-dropdownalert": "^3.7.1",
     "react-native-elements": "^0.19.1",
     "react-native-firebase": "^5.1.1",
+    "react-native-multiple-tags": "0.0.4",
     "react-native-tags": "^1.7.0",
     "react-navigation": "^2.18.2",
     "react-redux": "^5.1.0",

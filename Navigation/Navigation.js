@@ -5,6 +5,7 @@ import { StyleSheet, Image } from 'react-native'
 import { Icon } from 'react-native-elements'
 import CityList from '../Components/CityList'
 import CategoryList from '../Components/CategoryList'
+import SpotForm from '../Components/SpotForm'
 import PlaceList from '../Components/PlaceList'
 import PlaceDetail from '../Components/PlaceDetail'
 import LoginView from '../Views/Login/LoginView'
@@ -61,7 +62,15 @@ const SearchStackNavigator = createStackNavigator({
   CategoryList: {
     screen: CategoryList,
     navigationOptions: {
+      header: null,
       title: 'Categories'
+    }
+  },
+  SpotForm: {
+    screen: SpotForm,
+    navigationOptions: {
+      header: null,
+      title: 'FormSpot'
     }
   },
   PlaceList: {

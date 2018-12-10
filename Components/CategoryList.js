@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { Header, Icon } from 'react-native-elements'
 import CategoryItem from './CategoryItem';
 import { connect } from 'react-redux';
 import { getCategoriesOfCity } from '../API/SYSKApi';
@@ -22,6 +23,11 @@ class CategoryList extends React.Component {
           isLoading : false //Stop loading page
         })
       })
+  }
+
+  _formAddPlace = () => {
+    console.log("OKKKKKK");
+    this.props.navigation.navigate('SpotForm', {nameCity: this.props.navigation.state.params.nameCity});
   }
 
   _displayLoading() {
@@ -45,6 +51,11 @@ class CategoryList extends React.Component {
     const { linkCity, nameCity } = this.props
     return (
       <View style={styles.main_container}>
+        <Header
+          leftComponent={<Icon name='chevron-left' type='font-awesome' color='#fff' onPress={() => this.props.navigation.goBack()} /> }
+          centerComponent={{ text: 'Categories', style: { color: '#fff' } }}
+          rightComponent={<Icon name='plus' type='font-awesome' color='#fff' onPress={() => this._formAddPlace()} /> }
+        />
         <FlatList
           style={styles.list}
           data={this.state.categories}
