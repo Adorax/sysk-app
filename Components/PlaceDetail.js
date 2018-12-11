@@ -21,15 +21,15 @@ class PlaceDetail extends React.Component {
       place: undefined,
       category: [],
       city: '',
-      rate: undefined,
+      rates: [],
       pic: undefined,
       isLoading: true,
+      percent: 0,
     }
   }
 
   componentDidMount() {
     get(this.props.navigation.state.params.linkPlace).then(data => {
-      console.log(data);
       let id = data._links.self.href.split("/")
       id = id[id.length-1];
       getCatOfPlace(id).then(cat =>
@@ -42,9 +42,13 @@ class PlaceDetail extends React.Component {
           })
         })
       )
-      //this.setState({place: data, isLoading: false})
+      get(data._links.rates.href).then(rates => {
+        this.setState({rates: rates._embedded.rates});
+      });
     });
   }
+
+
 
   _displayLoading() {
     if (this.state.isLoading) {
@@ -59,18 +63,19 @@ class PlaceDetail extends React.Component {
   addRate = async (isUp) => {
     let idPlace = this.state.place._links.self.href.split("/")
     idPlace = idPlace[idPlace.length-1];
-    console.log(idPlace + " ========================================================");
     const username = await AsyncStorage.getItem("login");
     getAUserbyUsername(username).then(user => {
         console.log(user._links.self.href);
         let idUser = user._links.self.href.split("/")
         idUser = idUser[idUser.length-1];
-        console.log(idUser + " ========================================================");
         addRate({"rate" : isUp, "idUser" : idUser, "idPlace" : idPlace}).then(rate => {
           console.log(rate);
+          get(this.state.place._links.rates.href).then(rates => {
+            this.setState({rates: rates._embedded.rates});
+          });
         });
-    });
 
+    });
   }
 
   _toggleFavorite() {
@@ -96,6 +101,11 @@ class PlaceDetail extends React.Component {
       )
   }
 
+  _displayPercent = () => {
+    const rateUp = this.state.rates.filter(rate => rate.like === true);
+    return Math.round( rateUp.length / this.state.rates.length * 1000 ) / 10;
+  }
+
   _displayPlace() {
     const { place } = this.state
     if (place != undefined) {
@@ -106,13 +116,8 @@ class PlaceDetail extends React.Component {
             source={require('../Img/place.jpg')}
           />
           <View style={styles.button_container}>
-            {/* 95% of 105 rates like this spot */}
-            {/*<Icon
-              size={38}
-              name='thumb-up'
-              onPress={() => console.log('up')}
-            />*/}
             <Text style={styles.title_text}>{place.namePlace}</Text>
+            <Text style={styles.percent_text}>{this._displayPercent()}% of {this.state.rates.length} rates like this</Text>
               {/* distance from you ...     <Icon
                 size={38}
                 name='tag_faces'
@@ -140,24 +145,23 @@ class PlaceDetail extends React.Component {
             />
           </View>
           <Text style={styles.description_text}> {place.description} </Text>
-          <View>
-          <TouchableOpacity
-              onPress={() => this._linkAddress()}>
-              <Text style={styles.default_text}>Address : {place.address}</Text>
-          </TouchableOpacity></View>
-          <Text style={styles.default_text}>City : {this.state.city} </Text>
-          <Text style={styles.default_text}>Note :  / 10</Text>
-          <Text style={styles.default_text}>Nombre de votes : </Text>
-          <Text style={styles.default_text}>Budget : {numeral().format('0,0[.]00 $')}</Text>
-          <Text style={styles.default_text}>Category :</Text>
-          <Tags
-            initialTags={this.state.category.map(function(category){
-                          return category.categoryName;
-                        })}
-            containerStyle={{ justifyContent: "center" }}
-            deleteTagOnPress={false}
-            readonly={true}
-          />
+          <View style={styles.info_container}>
+            <TouchableOpacity
+                onPress={() => this._linkAddress()}>
+                <Text style={styles.default_text}>Address : {place.address}</Text>
+            </TouchableOpacity>
+            <Text style={styles.default_text}>City : {this.state.city} </Text>
+            <Text style={styles.default_text}>Nombre de votes : {this.state.rates.length}</Text>
+            <Text style={styles.default_text}>Category :</Text>
+            <Tags
+              initialTags={this.state.category.map(function(category){
+                            return category.categoryName;
+                          })}
+              containerStyle={{ justifyContent: "center" }}
+              deleteTagOnPress={false}
+              readonly={true}
+            />
+          </View>
         </ScrollView>
       )
     }
@@ -193,10 +197,14 @@ const styles = StyleSheet.create({
     height: 169,
     margin: 5
   },
+  percent_text: {
+    flex: 1,
+    flexWrap: 'wrap',
+  },
   title_text: {
     fontWeight: 'bold',
     fontSize: 35,
-    flex: 1,
+    flex: 4,
     flexWrap: 'wrap',
     marginLeft: 5,
     marginRight: 5,
@@ -223,6 +231,10 @@ const styles = StyleSheet.create({
   button_container: {
     flex: 1,
     flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  info_container: {
+    flex: 1,
     justifyContent: 'space-around',
   },
   favorite_image: {

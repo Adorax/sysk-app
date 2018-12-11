@@ -29,6 +29,7 @@ export default class LoginView extends React.Component {
       checkLogin(credential).then(user => {
         if (user.username) {
           this._storeLogin(user);
+          
         } else {
           Alert.alert("Error", "Wrong credentials, please try again.")
           this.setState({isLoading: false})
