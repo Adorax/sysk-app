@@ -54,7 +54,6 @@ class CategoryList extends React.Component {
         <Header
           leftComponent={<Icon name='chevron-left' type='font-awesome' color='#fff' onPress={() => this.props.navigation.goBack()} /> }
           centerComponent={{ text: 'Categories', style: { color: '#fff' } }}
-          rightComponent={<Icon name='plus' type='font-awesome' color='#fff' onPress={() => this._formAddPlace()} /> }
         />
         <FlatList
           style={styles.list}
